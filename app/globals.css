@@ -84,7 +84,7 @@ section {
 
 button {
   background: var(--accent);
-  color: white;
+  color: var(--text);
   border: 0;
   padding: 12px;
   border-radius: 8px;
