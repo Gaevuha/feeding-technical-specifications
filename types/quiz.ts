@@ -1,4 +1,4 @@
-export type Category = "html" | "js" | "react";
+export type Category = "html+css" | "js" | "react" | "node";
 
 export interface AnswerType {
   text: string;

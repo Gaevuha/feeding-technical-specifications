@@ -9,7 +9,7 @@ import Result from "./Result";
 
 const STORAGE_KEY = "quiz_last_score";
 const THEME_KEY = "quiz_theme";
-const DEFAULT_TIME = 20; // seconds per question
+const DEFAULT_TIME = 60; // секунд на питання
 
 export default function Quiz() {
   const [category, setCategory] = useState<Category | null>(null);
@@ -19,6 +19,7 @@ export default function Quiz() {
   const [timeLeft, setTimeLeft] = useState(DEFAULT_TIME);
   const [theme, setTheme] = useState<"light" | "dark">("light");
 
+  // завантаження теми з localStorage
   useEffect(() => {
     const savedTheme = localStorage.getItem(THEME_KEY);
     if (savedTheme === "dark") {
@@ -27,6 +28,7 @@ export default function Quiz() {
     }
   }, []);
 
+  // оновлення теми при зміні
   useEffect(() => {
     localStorage.setItem(THEME_KEY, theme);
     document.documentElement.setAttribute(
@@ -35,30 +37,32 @@ export default function Quiz() {
     );
   }, [theme]);
 
+  // питання для обраної категорії
   const questions: QuestionType[] = useMemo(
-    () => (category ? questionsByCategory[category] : []),
+    () => (category ? questionsByCategory[category] || [] : []),
     [category]
   );
 
+  // таймер
   useEffect(() => {
-    if (!category) return;
+    if (!category || finished) return;
+
     setTimeLeft(DEFAULT_TIME);
-    const t = setInterval(() => {
+    const interval = setInterval(() => {
       setTimeLeft((s) => {
         if (s <= 1) {
-          // treat as wrong and advance
           handleAnswer(false, true);
           return DEFAULT_TIME;
         }
         return s - 1;
       });
     }, 1000);
-    return () => clearInterval(t);
+
+    return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category, current]);
+  }, [category, current, finished]);
 
   const handleAnswer = (isCorrect: boolean, fromTimer = false) => {
-    // prevent double counting if finished already
     if (finished) return;
 
     if (isCorrect) setScore((p) => p + 1);
@@ -68,7 +72,6 @@ export default function Quiz() {
       setTimeLeft(DEFAULT_TIME);
     } else {
       setFinished(true);
-      // save result
       localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify({
@@ -89,6 +92,7 @@ export default function Quiz() {
     setTimeLeft(DEFAULT_TIME);
   };
 
+  // якщо категорія не обрана
   if (!category) {
     return (
       <div className="card">
@@ -110,7 +114,7 @@ export default function Quiz() {
         </div>
 
         <div className="buttons">
-          <button onClick={() => setCategory("html")}>HTML+CSS</button>
+          <button onClick={() => setCategory("html+css")}>HTML+CSS</button>
           <button onClick={() => setCategory("js")}>JavaScript</button>
           <button onClick={() => setCategory("react")}>React</button>
         </div>
@@ -123,6 +127,19 @@ export default function Quiz() {
     );
   }
 
+  // якщо питань немає (безпечний fallback)
+  if (!questions.length) {
+    return (
+      <div className="card">
+        <div>Питання для цієї категорії не знайдено.</div>
+        <button onClick={() => setCategory(null)}>
+          Оберіть іншу категорію
+        </button>
+      </div>
+    );
+  }
+
+  // якщо вікторина завершена
   if (finished) {
     return (
       <Result
