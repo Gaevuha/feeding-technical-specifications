@@ -873,7 +873,7 @@ export const questionsByCategory: Record<Category, QuestionType[]> = {
 
     makeQuestion("js-15", "Як перевірити, чи містить масив певний елемент?", [
       {
-        text: "Array.prototype.includes(value) або indexOf для сумісності.",
+        text: "За допомогою includes(value) або some(callback), які повертають true або false.",
         correct: true,
       },
       { text: "typeof array === 'contains'.", correct: false },
@@ -900,7 +900,7 @@ export const questionsByCategory: Record<Category, QuestionType[]> = {
 
     makeQuestion("js-17", "Що таке підняття (hoisting) і як воно працює?", [
       {
-        text: "Hoisting — підняття оголошень (var, function) на початок області видимості; let/const теж піднімаються, але в TDZ.",
+        text: "Hoisting — підняття оголошень (var, function) на початок області видимості; let/const теж піднімаються, але в TDZ. TDZ — це тимчасова зона, де змінна let або const існує, але ще не ініціалізована, і доступ до неї до оголошення викликає ReferenceError",
         correct: true,
       },
       { text: "Hoisting — процес зменшення розміру файлу.", correct: false },
@@ -941,7 +941,7 @@ export const questionsByCategory: Record<Category, QuestionType[]> = {
       "Що таке область видимості (scope) і які її види існують?",
       [
         {
-          text: "Scope — контекст видимості змінних: глобальна, функціональна, блочна (let/const) та модульна.",
+          text: "Область видимості (scope) — механізм, який визначає доступність змінних у коді, що виконується. Ланцюжок областей видимості (scope chain) — області видимості утворюють ієрархію, так що дочірні області мають доступ до змінних із батьківських областей, але не навпаки. Змінна видима для виконуваного коду, якщо вона є:в поточній області видимості або в ланцюжку областей видимості.",
           correct: true,
         },
         { text: "Scope — тільки глобальні змінні.", correct: false },
@@ -955,7 +955,7 @@ export const questionsByCategory: Record<Category, QuestionType[]> = {
       "У чому різниця між Function Declaration та Function Expression?",
       [
         {
-          text: "Function Declaration піднімається (hoisted); Function Expression не піднімається і може бути анонімною.",
+          text: "Function Declaration оголошується окремою конструкцією і може бути викликана до місця оголошення завдяки hoisting. Function Expression — це функція, присвоєна змінній (наприклад, const), і її можна викликати лише після оголошення, оскільки вона не доступна до ініціалізації змінної.",
           correct: true,
         },
         { text: "Declaration — це завжди стрілкова функція.", correct: false },
@@ -969,7 +969,7 @@ export const questionsByCategory: Record<Category, QuestionType[]> = {
       "Що таке callback-функція і навіщо її використовують?",
       [
         {
-          text: "Callback — функція, передана як аргумент в іншу функцію, викликається пізніше для обробки результату або події.",
+          text: "Callback-функція — це функція, яка передається як аргумент в іншу функцію і викликається всередині неї для обробки результату, події або виконання певної дії. Це дозволяє робити код гнучким і повторно використовуваним.",
           correct: true,
         },
         { text: "Callback — функція, яка повертає проміс.", correct: false },
@@ -986,7 +986,7 @@ export const questionsByCategory: Record<Category, QuestionType[]> = {
       "У чому відмінності між стрілковою функцією та звичайною функцією?",
       [
         {
-          text: "Стрілкова функція не має власного this і arguments, її не можна використовувати як конструктор.",
+          text: "Стрілкова функція має коротший синтаксис, не має власного this та arguments, створюється лише як function expression і не може використовуватися як конструктор (з new).",
           correct: true,
         },
         { text: "Стрілкові функції завжди працюють швидше.", correct: false },
@@ -1000,7 +1000,7 @@ export const questionsByCategory: Record<Category, QuestionType[]> = {
       "Чи мають стрілкові функції доступ до arguments? Якщо ні — який аналог?",
       [
         {
-          text: "Ні; замість arguments використовують rest-параметри (...args) або зовнішні змінні.",
+          text: "У стрілочних функцій немає локальної змінної arguments, що містить усі аргументи. Якщо необхідно зібрати всі аргументи в масив, використовується операція rest",
           correct: true,
         },
         { text: "Так, вони завжди мають доступ до arguments.", correct: false },
@@ -1017,7 +1017,7 @@ export const questionsByCategory: Record<Category, QuestionType[]> = {
       "Як викликати функцію з затримкою 10 секунд? Наведіть приклад.",
       [
         {
-          text: "setTimeout(() => fn(), 10000) — виконає fn через 10 секунд.",
+          text: "setTimeout(() => {}, 10000) — виконає fn через 10 секунд.",
           correct: true,
         },
         { text: "sleep(10000) — вбудована функція JS.", correct: false },
